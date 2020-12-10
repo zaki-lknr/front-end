@@ -75,8 +75,36 @@
    *   });
    * });
    */
-  helpers.simpleHttpRequest = function(url, res, next) {
-    request.get(url, function(error, response, body) {
+  helpers.simpleHttpRequest = function(url, req, res, next) {
+    var headers = {}
+    if (req.headers['x-request-id']) {
+      headers['x-request-id'] = req.headers['x-request-id'];
+    }
+    if (req.headers['x-b3-traceid']) {
+      headers['x-b3-traceid'] = req.headers['x-b3-traceid'];
+    }
+    if (req.headers['x-b3-spanid']) {
+      headers['x-b3-spanid'] = req.headers['x-b3-spanid'];
+    }
+    if (req.headers['x-b3-parentspanid']) {
+      headers['x-b3-parentspanid'] = req.headers['x-b3-parentspanid'];
+    }
+    if (req.headers['x-b3-sampled']) {
+      headers['x-b3-sampled'] = req.headers['x-b3-sampled'];
+    }
+    if (req.headers['x-b3-flags']) {
+      headers['x-b3-flags'] = req.headers['x-b3-flags'];
+    }
+    if (req.headers['x-ot-span-context']) {
+      headers['x-ot-span-context'] = req.headers['x-ot-span-context'];
+    }
+    var options = {
+        url: url,
+        method: 'GET',
+        headers: headers
+    }
+
+    request.get(options, function(error, response, body) {
       if (error) return next(error);
       helpers.respondSuccessBody(res, body);
     }.bind({res: res}));

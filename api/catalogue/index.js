@@ -15,11 +15,11 @@
   });
 
   app.get("/catalogue*", function (req, res, next) {
-    helpers.simpleHttpRequest(endpoints.catalogueUrl + req.url.toString(), res, next);
+    helpers.simpleHttpRequest(endpoints.catalogueUrl + req.url.toString(), req, res, next);
   });
 
   app.get("/tags", function(req, res, next) {
-    helpers.simpleHttpRequest(endpoints.tagsUrl, res, next);
+    helpers.simpleHttpRequest(endpoints.tagsUrl, req, res, next);
   });
 
   module.exports = app;
